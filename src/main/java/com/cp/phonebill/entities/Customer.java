@@ -3,20 +3,22 @@ package com.cp.phonebill.entities;
 public class Customer {
 
 	private int customerAccNo;
+	private String customerName;
 	private long customerPhoneNo;
 	private String customerAddress1;
 	private String customerAddress2;
 	private String customerCity;
 	private String customerState;
-	private String customerPincode;
+	private int customerPincode;
 
 	public Customer() {
 		super();
 	}
 
-	public Customer(long customerPhoneNo, String customerAddress1, String customerAddress2, String customerCity,
-			String customerState, String customerPincode) {
+	public Customer(String customerName, long customerPhoneNo, String customerAddress1, String customerAddress2,
+			String customerCity, String customerState, int customerPincode) {
 		super();
+		this.customerName = customerName;
 		this.customerPhoneNo = customerPhoneNo;
 		this.customerAddress1 = customerAddress1;
 		this.customerAddress2 = customerAddress2;
@@ -25,10 +27,11 @@ public class Customer {
 		this.customerPincode = customerPincode;
 	}
 
-	public Customer(int customerAccNo, long customerPhoneNo, String customerAddress1, String customerAddress2,
-			String customerCity, String customerState, String customerPincode) {
+	public Customer(int customerAccNo, String customerName, long customerPhoneNo, String customerAddress1,
+			String customerAddress2, String customerCity, String customerState, int customerPincode) {
 		super();
 		this.customerAccNo = customerAccNo;
+		this.customerName = customerName;
 		this.customerPhoneNo = customerPhoneNo;
 		this.customerAddress1 = customerAddress1;
 		this.customerAddress2 = customerAddress2;
@@ -85,12 +88,20 @@ public class Customer {
 		this.customerState = customerState;
 	}
 
-	public String getCustomerPincode() {
+	public int getCustomerPincode() {
 		return customerPincode;
 	}
 
-	public void setCustomerPincode(String customerPincode) {
+	public void setCustomerPincode(int customerPincode) {
 		this.customerPincode = customerPincode;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [customerAccNo=" + customerAccNo + ", customerPhoneNo=" + customerPhoneNo
+				+ ", customerAddress1=" + customerAddress1 + ", customerAddress2=" + customerAddress2
+				+ ", customerCity=" + customerCity + ", customerState=" + customerState + ", customerPincode="
+				+ customerPincode + "]";
 	}
 
 }
