@@ -48,6 +48,14 @@ public class Customer {
 		this.customerAccNo = customerAccNo;
 	}
 
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
 	public long getCustomerPhoneNo() {
 		return customerPhoneNo;
 	}
@@ -98,8 +106,8 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [customerAccNo=" + customerAccNo + ", customerPhoneNo=" + customerPhoneNo
-				+ ", customerAddress1=" + customerAddress1 + ", customerAddress2=" + customerAddress2
+		return "Customer [customerAccNo=" + customerAccNo + ", customerName=" + customerName + ", customerPhoneNo="
+				+ customerPhoneNo + ", customerAddress1=" + customerAddress1 + ", customerAddress2=" + customerAddress2
 				+ ", customerCity=" + customerCity + ", customerState=" + customerState + ", customerPincode="
 				+ customerPincode + "]";
 	}

@@ -21,37 +21,41 @@ public class CustomerRepo {
 
 	public int insertCustomerDetails(Customer customer) {
 
-		String insertQuery = "INSERT INTO customer(cust_PhNo, cust_address1, cust_address2, cust_city, cust_state, cust_pincode) VALUES(?,?,?,?,?,?)";
+		String insertQuery = "INSERT INTO customer(cust_PhNo,cust_name, cust_address1, cust_address2, cust_city, cust_state, cust_pincode) VALUES(?,?,?,?,?,?,?)";
 		dbm = DBManager.getDBManager();
 		con = dbm.getConnection();
 		int customerAccNo = 0;
 		try {
 			pstmt = con.prepareStatement(insertQuery);
 			pstmt.setLong(1, customer.getCustomerPhoneNo());
-			pstmt.setString(2, customer.getCustomerAddress1());
-			pstmt.setString(3, customer.getCustomerAddress2());
-			pstmt.setString(4, customer.getCustomerCity());
-			pstmt.setString(5, customer.getCustomerState());
-			pstmt.setInt(6, customer.getCustomerPincode());
+			pstmt.setString(2, customer.getCustomerName());
+			pstmt.setString(3, customer.getCustomerAddress1());
+			pstmt.setString(4, customer.getCustomerAddress2());
+			pstmt.setString(5, customer.getCustomerCity());
+			pstmt.setString(6, customer.getCustomerState());
+			pstmt.setInt(7, customer.getCustomerPincode());
 
 			pstmt.execute();
-
-			customerAccNo = getNewestAccountNumber();
+			dbm.printConSize();
+			customerAccNo = getNewestAccountNumber(con);
+			dbm.printConSize();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			dbm.closeConnection(con);
 		}
 
 		return customerAccNo;
 	}
 
-	private int getNewestAccountNumber() {
+	private int getNewestAccountNumber(Connection connection) {
 		// TODO Auto-generated method stub
 		String getQuery = "select max(cust_accno) from customer";
 		int customerAccNo = 0;
 		try {
-			con = dbm.getConnection();
-			stmt = con.createStatement();
+			dbm.printConSize();
+			stmt = connection.createStatement();
 			rs = stmt.executeQuery(getQuery);
 			while (rs.next()) {
 				customerAccNo = rs.getInt(1);
@@ -62,10 +66,8 @@ public class CustomerRepo {
 			e.printStackTrace();
 		} catch (Exception exp) {
 			exp.printStackTrace();
-		} finally {
-			dbm.closeConnection(con);
-
 		}
+		dbm.printConSize();
 		return customerAccNo;
 	}
 
@@ -98,7 +100,7 @@ public class CustomerRepo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-
+			dbm.closeConnection(con);
 		}
 		return custList;
 	}
