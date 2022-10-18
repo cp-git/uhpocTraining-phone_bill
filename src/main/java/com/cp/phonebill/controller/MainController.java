@@ -56,13 +56,43 @@ public class MainController {
 					System.out.println("Enter customer phone no");
 					customerPhoneNo = scanner.nextLine();
 
-//					if (isValidTelephoneNumber(customerPhoneNo)) {
-//						// System.out.println("Please re-enter details");
-//						continue;
-//					}
+					if (isValidPhoneNumber(customerPhoneNo)) {
+						// System.out.println("Please re-enter details");
+						if (customerCache.containsKey(Long.parseLong(customerPhoneNo))) {
+							System.out.println("Customer already exist");
+							System.out.println("Do you want to add another Customer [Y]es or [N]o?");
+							String choice = scanner.nextLine();
 
-					if (customerCache.containsKey(customerPhoneNo)) {
-						System.out.println("Customer already exist");
+							if (choice.equals("Y") || choice.equals("y")) {
+								System.out.println("please enter correct input");
+								continue;
+							} else {
+								break;
+							}
+						}
+
+						System.out.println("Enter customer address1");
+						customerAddress1 = scanner.nextLine();
+
+						System.out.println("Enter customer address2");
+						customerAddress2 = scanner.nextLine();
+
+						System.out.println("Enter customer city");
+						customerCity = scanner.nextLine();
+
+						System.out.println("Enter customer state");
+						customerState = scanner.nextLine();
+
+						System.out.println("Enter address pincode");
+						customerPincode = scanner.nextInt();
+						scanner.nextLine();
+
+						Customer customer = new Customer(customerName, Long.parseLong(customerPhoneNo),
+								customerAddress1, customerAddress2, customerCity, customerState, customerPincode);
+
+						int customerAccNo = customerServ.createCustomer(customer);
+						System.out.println(customerAccNo);
+						customerCache.put(Long.parseLong(customerPhoneNo), customer);
 						System.out.println("Do you want to add another Customer [Y]es or [N]o?");
 						String choice = scanner.nextLine();
 
@@ -71,46 +101,56 @@ public class MainController {
 						} else {
 							break;
 						}
-					}
 
-					System.out.println("Enter customer address1");
-					customerAddress1 = scanner.nextLine();
-
-					System.out.println("Enter customer address2");
-					customerAddress2 = scanner.nextLine();
-
-					System.out.println("Enter customer city");
-					customerCity = scanner.nextLine();
-
-					System.out.println("Enter customer state");
-					customerState = scanner.nextLine();
-
-					System.out.println("Enter address pincode");
-					customerPincode = scanner.nextInt();
-					scanner.nextLine();
-
-					Customer customer = new Customer(customerName, Long.parseLong(customerPhoneNo), customerAddress1,
-							customerAddress2, customerCity, customerState, customerPincode);
-
-					int customerAccNo = customerServ.createCustomer(customer);
-					System.out.println(customerAccNo);
-					customerCache.put(Long.parseLong(customerPhoneNo), customer);
-					System.out.println("Do you want to add another Customer [Y]es or [N]o?");
-					String choice = scanner.nextLine();
-
-					if (choice.equals("Y") || choice.equals("y")) {
-						continue;
 					} else {
-						break;
+						System.out.println("Please re-enter details because mobile number is not valid");
+						continue;
 					}
+
 				}
 
 				break;
 			case 2:
+				System.out.println("Enter customer phone number");
+				String customerPhoneNo = "";
+				customerPhoneNo = scanner.nextLine();
+				if (isValidPhoneNumber(customerPhoneNo)) {
+					if (customerCache.containsKey(Long.parseLong(customerPhoneNo))) {
+						System.out.println("Enter call details");
+						System.out.println("Enter date - DD/MM/YYYY");
+						String date = scanner.nextLine();
 
+						while (true) {
+							System.out.println("Enter phone number");
+							String callPhoneNo = scanner.nextLine();
+							if (isValidPhoneNumber(callPhoneNo)) {
+
+								System.out.println("Enter [i]ncoming / [o]utgoing call");
+								String callInOut = scanner.nextLine();
+
+								System.out.println("Enter call duration");
+								int callDuration = scanner.nextInt();
+								scanner.nextLine();
+
+								break;
+							} else {
+								System.out.println("Please re-enter details because phone number is not valid");
+								continue;
+							}
+						}
+					} else {
+						System.out.println("customer details not exist");
+						break;
+					}
+
+				} else {
+					System.out.println("Please re-enter details because mobile number is not valid");
+					continue;
+				}
 				break;
 			case 3:
-
+//				CallDetailsRepo callRepo = new CallDetailsRepo();
+//				callRepo.getAllCallDetails();
 				break;
 			case 4:
 				scanner.close();
@@ -145,17 +185,15 @@ public class MainController {
 		System.out.println(customerCache);
 	}
 
-//	private static boolean isValidTelephoneNumber(String number) {
-//		long num = 0L;
-//		try {
-//			num = Long.parseLong("0" + number);
-//			System.out.println(7000000000L <= num && num <= 9999999999L);
-//
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			System.out.println("Please re-enter details because mobile number is not valid");
-//		}
-//		return 7000000000L <= num && num >= 9999999999L;
-//
-//	}
+	private static boolean isValidPhoneNumber(String number) {
+		long num = 0L;
+		try {
+			num = Long.parseLong("0" + number);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+
+		return 7000000000L <= num && num <= 9999999999L;
+	}
 }

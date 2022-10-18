@@ -49,12 +49,12 @@ public class CustomerRepo {
 		return customerAccNo;
 	}
 
-	private int getNewestAccountNumber(Connection connection) {
+	public int getNewestAccountNumber(Connection connection) {
 		// TODO Auto-generated method stub
 		String getQuery = "select max(cust_accno) from customer";
 		int customerAccNo = 0;
 		try {
-			dbm.printConSize();
+			// dbm.printConSize();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(getQuery);
 			while (rs.next()) {
@@ -67,7 +67,7 @@ public class CustomerRepo {
 		} catch (Exception exp) {
 			exp.printStackTrace();
 		}
-		dbm.printConSize();
+		// dbm.printConSize();
 		return customerAccNo;
 	}
 
