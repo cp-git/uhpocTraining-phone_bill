@@ -4,26 +4,31 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.cp.phonebill.entities.CallDetails;
+import com.cp.phonebill.repo.CallDetailsRepo;
 import com.cp.phonebill.services.CallDetailsService;
 
 public class CallDetailsServiceImpl implements CallDetailsService {
 
-	@Override
+	CallDetailsRepo callDetailsRepo = null;
+
 	public HashMap<Long, List<CallDetails>> initializeCallCache() {
-		// TODO Auto-generated method stub
 
-		return null;
-	}
-
-	@Override
-	public void createCallDetails(CallDetails callDetails) {
-		// TODO Auto-generated method stub
+		callDetailsRepo = new CallDetailsRepo();
+		return callDetailsRepo.getAllCallDetails();
 
 	}
 
-	@Override
+	public int createCallDetails(CallDetails callDetails) {
+
+		callDetailsRepo = new CallDetailsRepo();
+		int callDetailsId = callDetailsRepo.insertCallDetails(callDetails);
+		return callDetailsId;
+
+	}
+
 	public List<CallDetails> getCallDetailsByCustomerAccNo(int customerAccNo) {
 		// TODO Auto-generated method stub
+
 		return null;
 	}
 

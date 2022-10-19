@@ -1,4 +1,4 @@
-package phonebill.impl;
+package com.cp.phonebill.repo;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,8 +17,9 @@ import com.cp.phonebill.helper.DBManager;
 import com.cp.phonebill.impl.CustomerServiceImpl;
 import com.cp.phonebill.services.CustomerService;
 
-public class TestCustomerServiceImpl {
+public class TestCustomerRepo {
 
+	private static CustomerRepo custRepo = null;
 	private static CustomerService custServ = null;
 	static HashMap<Long, Customer> customerCache = null;
 	static DBManager dbm = null;
@@ -29,6 +30,7 @@ public class TestCustomerServiceImpl {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.out.println("Before");
+		custRepo = new CustomerRepo();
 		custServ = new CustomerServiceImpl();
 		customerCache = new HashMap<>();
 		dbm = DBManager.getDBManager();
@@ -41,20 +43,25 @@ public class TestCustomerServiceImpl {
 	}
 
 	@Test
-	public void testGetCustomerDetails() {
+	public void testGetNewestAccountNumber() {
 		Customer expCust = new Customer(10001, "mayur", 12345, "add1", "add2", "pune", "mstate", 123456);
+
+		int LastCustAccNo = custRepo.getNewestAccountNumber(con);
 
 		custList = custServ.getAllCustomerDetails();
 
-		Customer cust = custList.get(0);
-		assertEquals(expCust.getCustomerAccNo(), cust.getCustomerAccNo());
-		assertEquals(expCust.getCustomerName(), cust.getCustomerName());
-		assertEquals(expCust.getCustomerPhoneNo(), cust.getCustomerPhoneNo());
-		assertEquals(expCust.getCustomerAddress1(), cust.getCustomerAddress1());
-		assertEquals(expCust.getCustomerAddress2(), cust.getCustomerAddress2());
-		assertEquals(expCust.getCustomerCity(), cust.getCustomerCity());
-		assertEquals(expCust.getCustomerState(), cust.getCustomerState());
-		assertEquals(expCust.getCustomerPincode(), cust.getCustomerPincode());
+		Customer cust = custList.get(custList.size() - 1);
+
+		assertEquals(cust.getCustomerAccNo(), LastCustAccNo);
+		//
+//		assertEquals(expCust.getCustomerAccNo(), cust.getCustomerAccNo());
+//		assertEquals(expCust.getCustomerName(), cust.getCustomerName());
+//		assertEquals(expCust.getCustomerPhoneNo(), cust.getCustomerPhoneNo());
+//		assertEquals(expCust.getCustomerAddress1(), cust.getCustomerAddress1());
+//		assertEquals(expCust.getCustomerAddress2(), cust.getCustomerAddress2());
+//		assertEquals(expCust.getCustomerCity(), cust.getCustomerCity());
+//		assertEquals(expCust.getCustomerState(), cust.getCustomerState());
+//		assertEquals(expCust.getCustomerPincode(), cust.getCustomerPincode());
 
 	}
 
@@ -72,6 +79,17 @@ public class TestCustomerServiceImpl {
 		assertEquals(expCust.getCustomerCity(), cust.getCustomerCity());
 		assertEquals(expCust.getCustomerState(), cust.getCustomerState());
 		assertEquals(expCust.getCustomerPincode(), cust.getCustomerPincode());
+
+	}
+
+	@Test
+	public void testGetCustomerPhoneNoByAccountNo() {
+
+		long phoneNo = custRepo.getCustomerPhoneNoByAccountNo(30012, con);
+		long phoneNo2 = custRepo.getCustomerPhoneNoByAccountNo(30011, con);
+
+		assertEquals(9638527410L, phoneNo);
+		assertEquals(9876543210L, phoneNo2);
 
 	}
 

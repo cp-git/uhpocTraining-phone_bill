@@ -12,7 +12,7 @@ public class CustomerServiceImpl implements CustomerService {
 	CustomerRepo customerRepo = null;
 
 	public HashMap<Long, Customer> initializeCustomerCache() {
-		// TODO Auto-generated method stub
+
 		HashMap<Long, Customer> customerCache = new HashMap<>();
 		List<Customer> custList = getAllCustomerDetails();
 		for (Customer cust : custList) {
@@ -22,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public int createCustomer(Customer customer) {
-		// TODO Auto-generated method stub
+
 		customerRepo = new CustomerRepo();
 		int customerAccNo = 0;
 
@@ -31,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	public List<Customer> getAllCustomerDetails() {
-		// TODO Auto-generated method stub
+
 		customerRepo = new CustomerRepo();
 		return customerRepo.getAllCustomerDetails();
 	}

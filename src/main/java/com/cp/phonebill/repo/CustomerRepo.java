@@ -104,4 +104,27 @@ public class CustomerRepo {
 		}
 		return custList;
 	}
+
+	public long getCustomerPhoneNoByAccountNo(int customerAccNoTemp, Connection connection) {
+		// TODO Auto-generated method stub
+		String getQuery = "SELECT cust_phno FROM customer WHERE cust_accno = " + customerAccNoTemp + "";
+		long customerPhoneNo = 0;
+		try {
+			// dbm.printConSize();
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(getQuery);
+			while (rs.next()) {
+				customerPhoneNo = rs.getLong(1);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception exp) {
+			exp.printStackTrace();
+		}
+		// dbm.printConSize();
+		return customerPhoneNo;
+
+	}
 }

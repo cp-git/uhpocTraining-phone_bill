@@ -1,17 +1,24 @@
 package com.cp.phonebill.controller;
 
 import java.io.FileInputStream;
+import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
+import com.cp.phonebill.entities.CallDetails;
 import com.cp.phonebill.entities.Customer;
+import com.cp.phonebill.impl.CallDetailsServiceImpl;
 import com.cp.phonebill.impl.CustomerServiceImpl;
+import com.cp.phonebill.repo.CallDetailsRepo;
+import com.cp.phonebill.services.CallDetailsService;
 import com.cp.phonebill.services.CustomerService;
 
 public class MainController {
 	static Properties props = null;
 	static HashMap<Long, Customer> customerCache = null;
+	static HashMap<Long, List<CallDetails>> callCache = null;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -111,46 +118,109 @@ public class MainController {
 
 				break;
 			case 2:
-				System.out.println("Enter customer phone number");
+
 				String customerPhoneNo = "";
-				customerPhoneNo = scanner.nextLine();
-				if (isValidPhoneNumber(customerPhoneNo)) {
-					if (customerCache.containsKey(Long.parseLong(customerPhoneNo))) {
-						System.out.println("Enter call details");
-						System.out.println("Enter date - DD/MM/YYYY");
-						String date = scanner.nextLine();
+				String date = "";
+				String callPhoneNo = "";
+				String callInOut = "";
+				int callDuration = 0;
+				Date callDate = null;
+				while (true) {
+					System.out.println("Enter customer phone number");
+					customerPhoneNo = scanner.nextLine();
 
-						while (true) {
-							System.out.println("Enter phone number");
-							String callPhoneNo = scanner.nextLine();
-							if (isValidPhoneNumber(callPhoneNo)) {
+					if (isValidPhoneNumber(customerPhoneNo)) {
 
-								System.out.println("Enter [i]ncoming / [o]utgoing call");
-								String callInOut = scanner.nextLine();
+						if (customerCache.containsKey(Long.parseLong(customerPhoneNo))) {
 
-								System.out.println("Enter call duration");
-								int callDuration = scanner.nextInt();
-								scanner.nextLine();
+							System.out.println("Enter call details");
+							System.out.println("Enter date - YYYY-MM-DD");
+							date = scanner.nextLine();
 
-								break;
-							} else {
-								System.out.println("Please re-enter details because phone number is not valid");
+							// System.out.println(date);
+							try {
+
+								callDate = Date.valueOf(date);
+
+							} catch (Exception ex) {
+
+								System.out.println("Error :  Incorrect date or format");
+//								ex.printStackTrace();
 								continue;
 							}
+
+							while (true) {
+
+								System.out.println("Enter phone number");
+								callPhoneNo = scanner.nextLine();
+
+								if (isValidPhoneNumber(callPhoneNo)) {
+
+									System.out.println("Enter [i]ncoming / [o]utgoing call");
+									callInOut = scanner.nextLine();
+
+									if (!(callInOut.equals("i") || callInOut.equals("I") || callInOut.equals("o")
+											|| callInOut.equals("O"))) {
+
+										System.out.println(
+												"please enter 'i' for incoming or 'o' for outgoing\n Please re-enter details");
+										continue;
+									}
+
+									System.out.println("Enter call duration");
+									callDuration = scanner.nextInt();
+									scanner.nextLine();
+
+									break;
+								} else {
+
+									System.out.println("Please re-enter details because phone number is not valid");
+									continue;
+								}
+							}
+
+						} else {
+
+							System.out.println("customer details not exist");
+							break;
 						}
+
 					} else {
-						System.out.println("customer details not exist");
+
+						System.out.println("Please re-enter details because mobile number is not valid");
+						continue;
+					}
+
+					Customer customer = customerCache.get(Long.parseLong(customerPhoneNo));
+
+					// System.out.println("cd" + callDate);
+
+					CallDetails callDetails = new CallDetails(callDate, Long.parseLong(callPhoneNo), callInOut,
+							callDuration, customer.getCustomerAccNo());
+
+					CallDetailsService callServ = new CallDetailsServiceImpl();
+					int callDetailsId = callServ.createCallDetails(callDetails);
+					callDetails.setCallDetailsId(callDetailsId);
+
+					List<CallDetails> callDetailsList = callCache.get(Long.parseLong(customerPhoneNo));
+					callDetailsList.add(callDetails);
+					callCache.put(Long.parseLong(customerPhoneNo), callDetailsList);
+					System.out.println(callCache);
+
+					System.out.println("Do you want to add more call details [Y]es or [N]o?");
+					String choice = scanner.nextLine();
+
+					if (choice.equals("Y") || choice.equals("y")) {
+						continue;
+					} else {
 						break;
 					}
 
-				} else {
-					System.out.println("Please re-enter details because mobile number is not valid");
-					continue;
 				}
 				break;
 			case 3:
-//				CallDetailsRepo callRepo = new CallDetailsRepo();
-//				callRepo.getAllCallDetails();
+				CallDetailsRepo callRepo = new CallDetailsRepo();
+				System.out.println(callRepo.getAllCallDetails());
 				break;
 			case 4:
 				scanner.close();
@@ -180,8 +250,12 @@ public class MainController {
 
 	private static void loadCache() {
 		CustomerService custServ = new CustomerServiceImpl();
-		customerCache = new HashMap<>();
 		customerCache = custServ.initializeCustomerCache();
+
+		CallDetailsService callServ = new CallDetailsServiceImpl();
+		callCache = callServ.initializeCallCache();
+
+		System.out.println(callCache);
 		System.out.println(customerCache);
 	}
 
