@@ -1,4 +1,4 @@
-package com.cp.phonebill.repo;
+package com.cp.phonebill.impl;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,12 +16,10 @@ import org.junit.Test;
 
 import com.cp.phonebill.entities.CallDetails;
 import com.cp.phonebill.helper.DBManager;
-import com.cp.phonebill.impl.CallDetailsServiceImpl;
 import com.cp.phonebill.services.CallDetailsService;
 
-public class TestCallDetailsRepo {
+public class TestCallDetailsServiceImpl {
 
-	static CallDetailsRepo callRepo = null;
 	static CallDetailsService callServ = null;
 	static HashMap<Long, List<CallDetails>> callCache = null;
 	static DBManager dbm = null;
@@ -31,7 +29,6 @@ public class TestCallDetailsRepo {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		System.out.println("Before");
-		callRepo = new CallDetailsRepo();
 		callServ = new CallDetailsServiceImpl();
 		callCache = new HashMap<>();
 		dbm = DBManager.getDBManager();
@@ -44,13 +41,13 @@ public class TestCallDetailsRepo {
 	}
 
 	@Test
-	public void testGetAllCallDetails() {
+	public void testInitializeCallCache() {
 		CallDetails call = new CallDetails(Date.valueOf("2022-10-12"), 7418529631L, "o", 50, 30001);
 		CallDetails call2 = new CallDetails(Date.valueOf("2022-10-12"), 9876543210L, "o", 100, 30001);
 		expList.add(call);
 		expList.add(call2);
 
-		callCache = callRepo.getAllCallDetails();
+		callCache = callServ.initializeCallCache();
 		System.out.println(callCache);
 		List<CallDetails> callList = callCache.get(123L);
 
@@ -71,7 +68,7 @@ public class TestCallDetailsRepo {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		dbm.closeConnection(con);
 	}
 }

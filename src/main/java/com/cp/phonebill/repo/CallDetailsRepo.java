@@ -108,7 +108,7 @@ public class CallDetailsRepo {
 
 	}
 
-	private int getLastCallDetailsId(Connection connection) {
+	public int getLastCallDetailsId(Connection connection) {
 
 		String getQuery = "select max(call_details_id) from call_details";
 		int callDetailsId = 0;

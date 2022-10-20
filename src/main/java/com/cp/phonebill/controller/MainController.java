@@ -2,6 +2,7 @@ package com.cp.phonebill.controller;
 
 import java.io.FileInputStream;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -9,9 +10,9 @@ import java.util.Scanner;
 
 import com.cp.phonebill.entities.CallDetails;
 import com.cp.phonebill.entities.Customer;
+import com.cp.phonebill.helper.DBManager;
 import com.cp.phonebill.impl.CallDetailsServiceImpl;
 import com.cp.phonebill.impl.CustomerServiceImpl;
-import com.cp.phonebill.repo.CallDetailsRepo;
 import com.cp.phonebill.services.CallDetailsService;
 import com.cp.phonebill.services.CustomerService;
 
@@ -21,30 +22,34 @@ public class MainController {
 	static HashMap<Long, List<CallDetails>> callCache = null;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
+		// Loading company property file and initializing cache
 		loadCompProperty();
 		loadCache();
 
 		while (true) {
-			System.out.println("============= Main Menu ============");
+
+			// Main menu
+			System.out.println("********* Main Menu ***********");
 			System.out.println("1. Create Customer Details.");
 			System.out.println("2. Add Call Details");
 			System.out.println("3. Print Phone Bill");
 			System.out.println("4. Exit");
+			System.out.println("Please enter your option 1, 2, 3 or 4");
 
+			// scanner class get inputs from console
 			Scanner scanner = new Scanner(System.in);
-			int option = 0;
+			int option = 0; // for option selected by user
 
 			try {
 				option = scanner.nextInt();
 				scanner.nextLine();
 			} catch (Exception ex) {
-				// TODO: handle exception
 				option = 0;
 			}
 
 			switch (option) {
+			// Adding customer details
 			case 1:
 				CustomerService customerServ = new CustomerServiceImpl();
 				while (true) {
@@ -66,12 +71,11 @@ public class MainController {
 					if (isValidPhoneNumber(customerPhoneNo)) {
 						// System.out.println("Please re-enter details");
 						if (customerCache.containsKey(Long.parseLong(customerPhoneNo))) {
-							System.out.println("Customer already exist");
+							System.out.println("Customer details already available");
 							System.out.println("Do you want to add another Customer [Y]es or [N]o?");
 							String choice = scanner.nextLine();
 
 							if (choice.equals("Y") || choice.equals("y")) {
-								System.out.println("please enter correct input");
 								continue;
 							} else {
 								break;
@@ -100,7 +104,8 @@ public class MainController {
 						int customerAccNo = customerServ.createCustomer(customer);
 						System.out.println(customerAccNo);
 						customerCache.put(Long.parseLong(customerPhoneNo), customer);
-						System.out.println("Do you want to add another Customer [Y]es or [N]o?");
+						System.out.println("Customer details added successfully"
+								+ "\nDo you want to add another Customer [Y]es or [N]o?");
 						String choice = scanner.nextLine();
 
 						if (choice.equals("Y") || choice.equals("y")) {
@@ -117,6 +122,8 @@ public class MainController {
 				}
 
 				break;
+
+			// Adding call details of customer
 			case 2:
 
 				String customerPhoneNo = "";
@@ -125,6 +132,7 @@ public class MainController {
 				String callInOut = "";
 				int callDuration = 0;
 				Date callDate = null;
+
 				while (true) {
 					System.out.println("Enter customer phone number");
 					customerPhoneNo = scanner.nextLine();
@@ -133,8 +141,8 @@ public class MainController {
 
 						if (customerCache.containsKey(Long.parseLong(customerPhoneNo))) {
 
-							System.out.println("Enter call details");
-							System.out.println("Enter date - YYYY-MM-DD");
+							System.out.println("Enter  Call Details");
+							System.out.println("Enter date (YYYY-MM-DD)");
 							date = scanner.nextLine();
 
 							// System.out.println(date);
@@ -181,7 +189,7 @@ public class MainController {
 
 						} else {
 
-							System.out.println("customer details not exist");
+							System.out.println("Customer details does not exist. ");
 							break;
 						}
 
@@ -191,23 +199,33 @@ public class MainController {
 						continue;
 					}
 
+					// getting details of customer using customer phone number
 					Customer customer = customerCache.get(Long.parseLong(customerPhoneNo));
 
-					// System.out.println("cd" + callDate);
-
+					// inserting all call Details in single object
 					CallDetails callDetails = new CallDetails(callDate, Long.parseLong(callPhoneNo), callInOut,
 							callDuration, customer.getCustomerAccNo());
 
 					CallDetailsService callServ = new CallDetailsServiceImpl();
+
+					// creating call details entry in DB and returning callDetailsId
 					int callDetailsId = callServ.createCallDetails(callDetails);
 					callDetails.setCallDetailsId(callDetailsId);
 
+					// Updating call details cache for given entry
 					List<CallDetails> callDetailsList = callCache.get(Long.parseLong(customerPhoneNo));
+
+					/*
+					 * if there is no entry of given customer phone number then it will create new
+					 * list of callDetails and then inserting entry
+					 */
+					if (callDetailsList == null) {
+						callDetailsList = new ArrayList<>();
+					}
 					callDetailsList.add(callDetails);
 					callCache.put(Long.parseLong(customerPhoneNo), callDetailsList);
-					System.out.println(callCache);
 
-					System.out.println("Do you want to add more call details [Y]es or [N]o?");
+					System.out.println("Call details added. \nDo you want to add more call details [Y]es or [N]o?");
 					String choice = scanner.nextLine();
 
 					if (choice.equals("Y") || choice.equals("y")) {
@@ -218,23 +236,27 @@ public class MainController {
 
 				}
 				break;
+
+			// printing phone bill
 			case 3:
-				CallDetailsRepo callRepo = new CallDetailsRepo();
-				System.out.println(callRepo.getAllCallDetails());
+
 				break;
 			case 4:
+				DBManager dbm = DBManager.getDBManager();
+				dbm.cleanPool();
 				scanner.close();
 				System.exit(0);
 				break;
 
 			default:
-				System.out.println("Please select valid option from 1 to 4");
+				System.out.println("Please enter option between 1 and 4");
 				break;
 			}
 		}
 
 	}
 
+	// for loading company details into property
 	private static void loadCompProperty() {
 		FileInputStream fs;
 		try {
@@ -248,6 +270,7 @@ public class MainController {
 		}
 	}
 
+	// for Loading customer cache and callDetalil cache
 	private static void loadCache() {
 		CustomerService custServ = new CustomerServiceImpl();
 		customerCache = custServ.initializeCustomerCache();
@@ -255,10 +278,9 @@ public class MainController {
 		CallDetailsService callServ = new CallDetailsServiceImpl();
 		callCache = callServ.initializeCallCache();
 
-		System.out.println(callCache);
-		System.out.println(customerCache);
 	}
 
+	// for validation of phone number
 	private static boolean isValidPhoneNumber(String number) {
 		long num = 0L;
 		try {
