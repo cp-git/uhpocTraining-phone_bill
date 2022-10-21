@@ -106,7 +106,11 @@ public class CustomerRepo {
 	}
 
 	public long getCustomerPhoneNoByAccountNo(int customerAccNoTemp, Connection connection) {
-		// TODO Auto-generated method stub
+
+		if (connection == null) {
+			connection = dbm.getConnection();
+		}
+
 		String getQuery = "SELECT cust_phno FROM customer WHERE cust_accno = " + customerAccNoTemp + "";
 		long customerPhoneNo = 0;
 		try {

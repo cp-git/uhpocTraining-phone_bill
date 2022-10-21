@@ -11,6 +11,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	CustomerRepo customerRepo = null;
 
+	public CustomerServiceImpl() {
+		customerRepo = new CustomerRepo();
+	}
+
 	public HashMap<Long, Customer> initializeCustomerCache() {
 
 		HashMap<Long, Customer> customerCache = new HashMap<>();
@@ -23,7 +27,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public int createCustomer(Customer customer) {
 
-		customerRepo = new CustomerRepo();
 		int customerAccNo = 0;
 
 		customerAccNo = customerRepo.insertCustomerDetails(customer);
@@ -32,8 +35,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public List<Customer> getAllCustomerDetails() {
 
-		customerRepo = new CustomerRepo();
 		return customerRepo.getAllCustomerDetails();
 	}
 
+	public Long getCustomerPhoneNoByAccountNo(int customerAccNo) {
+
+		return customerRepo.getCustomerPhoneNoByAccountNo(customerAccNo, null);
+	}
 }

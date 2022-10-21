@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cp.training</groupId>
 	<artifactId>phonebill</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.0.1-SNAPSHOT</version>
 	<name>phone bill</name>
 	<description>phone bill generation system</description>
 	<dependencies>

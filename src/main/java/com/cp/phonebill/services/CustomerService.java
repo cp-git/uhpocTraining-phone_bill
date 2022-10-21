@@ -12,4 +12,6 @@ public interface CustomerService {
 	int createCustomer(Customer customer);
 
 	List<Customer> getAllCustomerDetails();
+
+	Long getCustomerPhoneNoByAccountNo(int customerAccNo);
 }

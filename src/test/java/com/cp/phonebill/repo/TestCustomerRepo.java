@@ -44,7 +44,6 @@ public class TestCustomerRepo {
 
 	@Test
 	public void testGetNewestAccountNumber() {
-		Customer expCust = new Customer(10001, "mayur", 12345, "add1", "add2", "pune", "mstate", 123456);
 
 		int LastCustAccNo = custRepo.getNewestAccountNumber(con);
 

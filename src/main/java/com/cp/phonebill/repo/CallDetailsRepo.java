@@ -24,7 +24,7 @@ public class CallDetailsRepo {
 
 	public HashMap<Long, List<CallDetails>> getAllCallDetails() {
 
-		String getQuery = "SELECT * FROM call_details ORDER BY cust_accno";
+		String getQuery = "SELECT * FROM call_details ORDER BY cust_accno, call_date";
 		HashMap<Long, List<CallDetails>> callList = new HashMap<>();
 		customerRepo = new CustomerRepo();
 		try {

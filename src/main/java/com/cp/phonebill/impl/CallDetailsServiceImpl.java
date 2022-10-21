@@ -11,16 +11,18 @@ public class CallDetailsServiceImpl implements CallDetailsService {
 
 	CallDetailsRepo callDetailsRepo = null;
 
+	public CallDetailsServiceImpl() {
+		callDetailsRepo = new CallDetailsRepo();
+	}
+
 	public HashMap<Long, List<CallDetails>> initializeCallCache() {
 
-		callDetailsRepo = new CallDetailsRepo();
 		return callDetailsRepo.getAllCallDetails();
 
 	}
 
 	public int createCallDetails(CallDetails callDetails) {
 
-		callDetailsRepo = new CallDetailsRepo();
 		int callDetailsId = callDetailsRepo.insertCallDetails(callDetails);
 		return callDetailsId;
 
