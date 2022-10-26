@@ -357,10 +357,46 @@ public class MainController {
 							callDuration = scanner.nextInt();
 							scanner.nextLine();
 
-							break;
+							// getting details of customer using customer phone number
+							Customer customer = customerCache.get(Long.parseLong(customerPhoneNo));
+
+							// inserting all call Details in single object
+							CallDetails callDetails = new CallDetails(callDate, Long.parseLong(callPhoneNo), callInOut,
+									callDuration, customer.getCustomerAccNo());
+
+							CallDetailsService callServ = new CallDetailsServiceImpl();
+
+							// creating call details entry in DB and returning callDetailsId
+							int callDetailsId = callServ.createCallDetails(callDetails);
+							callDetails.setCallDetailsId(callDetailsId);
+
+							// Updating call details cache for given entry
+							List<CallDetails> callDetailsList = callCache.get(Long.parseLong(customerPhoneNo));
+
+							/*
+							 * if there is no entry of given customer phone number then it will create new
+							 * list of callDetails and then inserting entry
+							 */
+							if (callDetailsList == null) {
+
+								callDetailsList = new ArrayList<>();
+							}
+
+							callDetailsList.add(callDetails);
+							callCache.put(Long.parseLong(customerPhoneNo), callDetailsList);
+
+							System.out.println(
+									"Call details added. \nDo you want to add more call details [Y]es or [N]o?");
+							String choice = scanner.nextLine();
+
+							if (choice.equals("Y") || choice.equals("y")) {
+								continue;
+							} else {
+								break;
+							}
 
 						}
-
+						break;
 					} else {
 
 						System.out.println(mb.getMessage("customer_not_exist"));
@@ -371,43 +407,6 @@ public class MainController {
 
 					System.out.println(mb.getMessage("invalid_phone_no"));
 					continue;
-				}
-
-				// getting details of customer using customer phone number
-				Customer customer = customerCache.get(Long.parseLong(customerPhoneNo));
-
-				// inserting all call Details in single object
-				CallDetails callDetails = new CallDetails(callDate, Long.parseLong(callPhoneNo), callInOut,
-						callDuration, customer.getCustomerAccNo());
-
-				CallDetailsService callServ = new CallDetailsServiceImpl();
-
-				// creating call details entry in DB and returning callDetailsId
-				int callDetailsId = callServ.createCallDetails(callDetails);
-				callDetails.setCallDetailsId(callDetailsId);
-
-				// Updating call details cache for given entry
-				List<CallDetails> callDetailsList = callCache.get(Long.parseLong(customerPhoneNo));
-
-				/*
-				 * if there is no entry of given customer phone number then it will create new
-				 * list of callDetails and then inserting entry
-				 */
-				if (callDetailsList == null) {
-
-					callDetailsList = new ArrayList<>();
-				}
-
-				callDetailsList.add(callDetails);
-				callCache.put(Long.parseLong(customerPhoneNo), callDetailsList);
-
-				System.out.println("Call details added. \nDo you want to add more call details [Y]es or [N]o?");
-				String choice = scanner.nextLine();
-
-				if (choice.equals("Y") || choice.equals("y")) {
-					continue;
-				} else {
-					break;
 				}
 
 			}
