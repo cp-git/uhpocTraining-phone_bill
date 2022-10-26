@@ -22,23 +22,35 @@ public class CallDetailsRepo {
 	List<CallDetails> callDetailsList = null;
 	CustomerRepo customerRepo = null;
 
+	public CallDetailsRepo() {
+		dbm = DBManager.getDBManager();
+	}
+
 	public HashMap<Long, List<CallDetails>> getAllCallDetails() {
 
 		String getQuery = "SELECT * FROM call_details ORDER BY cust_accno, call_date";
 		HashMap<Long, List<CallDetails>> callList = new HashMap<>();
 		customerRepo = new CustomerRepo();
+
 		try {
-			dbm = DBManager.getDBManager();
+
 			con = dbm.getConnection();
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(getQuery);
 
-			rs.next();
+			if (rs.next() == false) {
+				return callList;
+			}
+
+			// uses do while because need to call rs.next() only once.
 			do {
+
 				int customerAccNoTemp = rs.getInt("cust_accno");
+				int customerAccNo = 0;
 
 				callDetailsList = new ArrayList<>();
-				int customerAccNo = 0;
+
+				// for iterating till customer account number are same
 				do {
 					if (customerAccNoTemp == rs.getInt("cust_accno")) {
 						customerAccNo = rs.getInt("cust_accno");
@@ -68,7 +80,7 @@ public class CallDetailsRepo {
 
 			} while (true);
 
-//			System.out.println(callList);
+			System.out.println(callList);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -85,7 +97,7 @@ public class CallDetailsRepo {
 		String insertQuery = "INSERT INTO call_details(call_date,call_phno,call_in_out,call_duration,cust_accno) VALUES(?,?,?,?,?)";
 		int callDetailsId = 0;
 		try {
-			dbm = DBManager.getDBManager();
+
 			con = dbm.getConnection();
 			pstmt = con.prepareStatement(insertQuery);
 
@@ -96,6 +108,7 @@ public class CallDetailsRepo {
 			pstmt.setInt(5, callDetails.getCustomerAccNo());
 
 			pstmt.execute();
+
 			callDetailsId = getLastCallDetailsId(con);
 		} catch (SQLException e) {
 
@@ -112,10 +125,12 @@ public class CallDetailsRepo {
 
 		String getQuery = "select max(call_details_id) from call_details";
 		int callDetailsId = 0;
+
 		try {
 			// dbm.printConSize();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(getQuery);
+
 			while (rs.next()) {
 				callDetailsId = rs.getInt(1);
 			}

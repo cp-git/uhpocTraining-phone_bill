@@ -19,9 +19,11 @@ public class CustomerServiceImpl implements CustomerService {
 
 		HashMap<Long, Customer> customerCache = new HashMap<>();
 		List<Customer> custList = getAllCustomerDetails();
+
 		for (Customer cust : custList) {
 			customerCache.put(cust.getCustomerPhoneNo(), cust);
 		}
+
 		return customerCache;
 	}
 

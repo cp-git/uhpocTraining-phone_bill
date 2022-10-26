@@ -16,7 +16,6 @@ public class CallDetailsServiceImpl implements CallDetailsService {
 	}
 
 	public HashMap<Long, List<CallDetails>> initializeCallCache() {
-
 		return callDetailsRepo.getAllCallDetails();
 
 	}

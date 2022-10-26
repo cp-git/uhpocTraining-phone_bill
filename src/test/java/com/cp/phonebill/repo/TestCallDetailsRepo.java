@@ -45,14 +45,14 @@ public class TestCallDetailsRepo {
 
 	@Test
 	public void testGetAllCallDetails() {
-		CallDetails call = new CallDetails(Date.valueOf("2022-10-12"), 7418529631L, "o", 50, 30001);
-		CallDetails call2 = new CallDetails(Date.valueOf("2022-10-12"), 9876543210L, "o", 100, 30001);
+		CallDetails call = new CallDetails(Date.valueOf("2022-10-25"), 9876543210L, "i", 120, 30015);
+		CallDetails call2 = new CallDetails(Date.valueOf("2022-10-26"), 9638527410L, "o", 150, 30015);
 		expList.add(call);
 		expList.add(call2);
 
 		callCache = callRepo.getAllCallDetails();
 		System.out.println(callCache);
-		List<CallDetails> callList = callCache.get(123L);
+		List<CallDetails> callList = callCache.get(9988776655L);
 
 		Iterator<CallDetails> it1 = expList.iterator();
 		Iterator<CallDetails> it2 = callList.iterator();

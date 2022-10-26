@@ -66,10 +66,10 @@ public class TestCustomerRepo {
 
 	@Test
 	public void testInitializeCustomerCache() {
-		Customer expCust = new Customer(10001, "mayur", 12345, "add1", "add2", "pune", "mstate", 123456);
+		Customer expCust = new Customer(30015, "Mayur", 9988776655L, "add1", "add2", "pune", "mh", 412307);
 
 		HashMap<Long, Customer> custCache = custServ.initializeCustomerCache();
-		Customer cust = custCache.get(12345L);
+		Customer cust = custCache.get(9988776655L);
 		assertEquals(expCust.getCustomerAccNo(), cust.getCustomerAccNo());
 		assertEquals(expCust.getCustomerName(), cust.getCustomerName());
 		assertEquals(expCust.getCustomerPhoneNo(), cust.getCustomerPhoneNo());
@@ -84,11 +84,11 @@ public class TestCustomerRepo {
 	@Test
 	public void testGetCustomerPhoneNoByAccountNo() {
 
-		long phoneNo = custRepo.getCustomerPhoneNoByAccountNo(30012, con);
-		long phoneNo2 = custRepo.getCustomerPhoneNoByAccountNo(30011, con);
+		long phoneNo = custRepo.getCustomerPhoneNoByAccountNo(30015, con);
+		long phoneNo2 = custRepo.getCustomerPhoneNoByAccountNo(30016, con);
 
-		assertEquals(9638527410L, phoneNo);
-		assertEquals(9876543210L, phoneNo2);
+		assertEquals(9988776655L, phoneNo);
+		assertEquals(9966338855L, phoneNo2);
 
 	}
 

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.cp.phonebill.exception.CPException;
+
 public class DBManager {
 
 	private static DBManager dbManager = null;
@@ -114,7 +116,7 @@ public class DBManager {
 		for (int i = 0; i < maxCon; i++) {
 			Connection con = conManager.get(0);
 			conManager.remove(0);
-			System.out.println(conManager.size());
+			// System.out.println(conManager.size());
 			try {
 				con.close();
 			} catch (SQLException e) {
@@ -122,7 +124,7 @@ public class DBManager {
 				e.printStackTrace();
 			}
 		}
-		printConSize();
+		// printConSize();
 	}
 
 	public void printConSize() {

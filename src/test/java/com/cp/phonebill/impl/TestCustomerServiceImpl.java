@@ -41,7 +41,7 @@ public class TestCustomerServiceImpl {
 
 	@Test
 	public void testGetCustomerDetails() {
-		Customer expCust = new Customer(10001, "mayur", 12345, "add1", "add2", "pune", "mstate", 123456);
+		Customer expCust = new Customer(30015, "Mayur", 9988776655L, "add1", "add2", "pune", "mh", 412307);
 
 		custList = custServ.getAllCustomerDetails();
 
@@ -59,10 +59,10 @@ public class TestCustomerServiceImpl {
 
 	@Test
 	public void testInitializeCustomerCache() {
-		Customer expCust = new Customer(10001, "mayur", 12345, "add1", "add2", "pune", "mstate", 123456);
+		Customer expCust = new Customer(30015, "Mayur", 9988776655L, "add1", "add2", "pune", "mh", 412307);
 
 		HashMap<Long, Customer> custCache = custServ.initializeCustomerCache();
-		Customer cust = custCache.get(12345L);
+		Customer cust = custCache.get(9988776655L);
 		assertEquals(expCust.getCustomerAccNo(), cust.getCustomerAccNo());
 		assertEquals(expCust.getCustomerName(), cust.getCustomerName());
 		assertEquals(expCust.getCustomerPhoneNo(), cust.getCustomerPhoneNo());
