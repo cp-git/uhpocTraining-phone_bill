@@ -102,7 +102,6 @@ public class MainController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
 	}
 
@@ -120,7 +119,6 @@ public class MainController {
 	private static boolean isValidPhoneNumber(String number) {
 		long num = 0L;
 		try {
-
 			num = Long.parseLong("0" + number);
 		} catch (Exception e) {
 
@@ -246,7 +244,7 @@ public class MainController {
 					System.out.println("Do you want to add another Customer [Y]es or [N]o?");
 					String choice = scanner.nextLine();
 
-					if (choice.equals("Y") || choice.equals("y")) {
+					if (choice.equalsIgnoreCase("y")) {
 						continue;
 					} else {
 						break;
@@ -284,7 +282,7 @@ public class MainController {
 						"Customer details added successfully" + "\nDo you want to add another Customer [Y]es or [N]o?");
 				String choice = scanner.nextLine();
 
-				if (choice.equals("Y") || choice.equals("y")) {
+				if (choice.equalsIgnoreCase("y")) {
 					continue;
 				} else {
 					break;
@@ -345,8 +343,7 @@ public class MainController {
 							System.out.println("Enter [i]ncoming / [o]utgoing call");
 							callInOut = scanner.nextLine();
 
-							if (!(callInOut.equals("i") || callInOut.equals("I") || callInOut.equals("o")
-									|| callInOut.equals("O"))) {
+							if (!(callInOut.equalsIgnoreCase("i") || callInOut.equalsIgnoreCase("o"))) {
 
 								System.out.println(
 										"please enter 'i' for incoming or 'o' for outgoing\n Please re-enter details");
@@ -389,7 +386,7 @@ public class MainController {
 									"Call details added. \nDo you want to add more call details [Y]es or [N]o?");
 							String choice = scanner.nextLine();
 
-							if (choice.equals("Y") || choice.equals("y")) {
+							if (choice.equalsIgnoreCase("y")) {
 								continue;
 							} else {
 								break;
@@ -456,7 +453,7 @@ public class MainController {
 							+ "\nDo you want to proceed for another customer? [Y]es/ [N]o.?");
 
 					String choice = scanner.nextLine();
-					if (choice.equals("Y") || choice.equals("y")) {
+					if (choice.equalsIgnoreCase("y")) {
 						continue;
 					} else {
 						break;

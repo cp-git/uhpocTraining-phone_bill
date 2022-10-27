@@ -51,6 +51,10 @@ public class TestCallDetailsRepo {
 		expList.add(call2);
 
 		callCache = callRepo.getAllCallDetails();
+		if (callCache.isEmpty()) {
+			return;
+		}
+
 		System.out.println(callCache);
 		List<CallDetails> callList = callCache.get(9988776655L);
 

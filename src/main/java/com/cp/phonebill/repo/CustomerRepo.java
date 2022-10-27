@@ -40,7 +40,7 @@ public class CustomerRepo {
 			customerAccNo = getNewestAccountNumber(con);
 			dbm.printConSize();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} finally {
 			dbm.closeConnection(con);
@@ -50,7 +50,7 @@ public class CustomerRepo {
 	}
 
 	public int getNewestAccountNumber(Connection connection) {
-		// TODO Auto-generated method stub
+
 		String getQuery = "select max(cust_accno) from customer";
 		int customerAccNo = 0;
 		try {
@@ -62,9 +62,10 @@ public class CustomerRepo {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (Exception exp) {
+
 			exp.printStackTrace();
 		}
 		// dbm.printConSize();

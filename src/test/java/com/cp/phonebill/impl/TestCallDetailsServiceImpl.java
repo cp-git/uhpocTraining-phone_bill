@@ -48,6 +48,11 @@ public class TestCallDetailsServiceImpl {
 		expList.add(call2);
 
 		callCache = callServ.initializeCallCache();
+
+		if (callCache.isEmpty()) {
+			return;
+		}
+
 		System.out.println(callCache);
 		List<CallDetails> callList = callCache.get(9988776655L);
 

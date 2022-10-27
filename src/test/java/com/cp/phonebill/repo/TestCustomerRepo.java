@@ -48,7 +48,9 @@ public class TestCustomerRepo {
 		int LastCustAccNo = custRepo.getNewestAccountNumber(con);
 
 		custList = custServ.getAllCustomerDetails();
-
+		if (custList.isEmpty()) {
+			return;
+		}
 		Customer cust = custList.get(custList.size() - 1);
 
 		assertEquals(cust.getCustomerAccNo(), LastCustAccNo);
@@ -69,6 +71,11 @@ public class TestCustomerRepo {
 		Customer expCust = new Customer(30015, "Mayur", 9988776655L, "add1", "add2", "pune", "mh", 412307);
 
 		HashMap<Long, Customer> custCache = custServ.initializeCustomerCache();
+
+		if (custCache.isEmpty()) {
+			return;
+		}
+
 		Customer cust = custCache.get(9988776655L);
 		assertEquals(expCust.getCustomerAccNo(), cust.getCustomerAccNo());
 		assertEquals(expCust.getCustomerName(), cust.getCustomerName());
